@@ -14,12 +14,13 @@ in a shell this agent can run.
 2. Draft the split as a table: title · plan section · scope · done when · blocked by.
    One issue per unit of work.
 3. **Stop and show the table to the human.** Publish nothing until they approve it.
-4. Ask the human what every issue here must carry (fields, labels, wording), unless it is
-   already written down in this session or in the repo.
-5. Create each issue in dependency order, so blocked-by can cite real numbers:
+4. Every issue carries what "What every issue carries" below says. Ask the human only about
+   anything beyond that (extra fields, labels, wording).
+5. Create the plan's label once (`gh label create "plan:<plan>"`), then each issue in dependency
+   order, so blocked-by can cite real numbers:
 
    ```sh
-   gh issue create --title "<title>" --body-file <tmp.md>
+   gh issue create --title "<title>" --body-file <tmp.md> --label "plan:<plan>"
    ```
 
 6. Record every issue URL from gh's output (not from memory) and reply with the list.
@@ -29,6 +30,34 @@ Closing one, with the closing comment from AGENTS.md:
 ```sh
 gh issue close <n> -c "<closing comment>"
 ```
+
+## What every issue carries
+
+Agreed with the human on the morning-digest plan (2026-11-23). The reviewer sorts on the first
+line and the label, so keep both exactly.
+
+- **Label:** `plan:<plan>`, the `plan:` value from `plan.md`'s frontmatter (e.g. `plan:morning-digest`).
+- **Body**, in this order:
+
+  ```md
+  Source: plan.md § <n>
+
+  ## Scope
+  <what the section asks for, in the plan's words; the rules from AGENTS.md / ADRs that apply>
+
+  ## Done when
+  <the plan's done line, checkable>
+
+  ## Blocked by
+  <#n, or —; say when only part of #n is needed (e.g. "#1 (types.ts only)")>
+
+  ## Worker model
+  <the model planned for it: strongest for logic, cheaper for views and tests (AGENTS.md)>
+  ```
+
+- **Waits on someone outside** (a reviewer, a human, a host): say so under Blocked by. Such an
+  issue stays open until they have answered, even when its done line reads as met once you have
+  sent something.
 
 ## No `gh`
 
